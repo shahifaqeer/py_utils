@@ -5,8 +5,8 @@ import numpy as np
 import sys
 import os
 
-ax1 = None
-ax2 = None
+fig1, ax1 = fig, ax1 = plt.subplots()
+ax2 = None #ax1.twinx()
 
 #### Plot time series (or just about anything) ####
 # Function returns reference to the plotted line
