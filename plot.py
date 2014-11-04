@@ -11,7 +11,7 @@ ax2 = None
 #### Plot time series (or just about anything) ####
 # Function returns reference to the plotted line
 # xarr, yarr are the x and y -axis arrays.
-#       xarr is optional. if not passed, it uses the index of the yarr points as the x-axis 
+#       xarr is optional. if not passed, it uses the index of the yarr points as the x-axis
 # ptype can be "plot" or "scatter"
 # cnt - integer between 0 and 11, to choose the line and marker style.
 #       this is optional. use if you're using multiple lines in same plot
@@ -19,7 +19,7 @@ ax2 = None
 # mfreq - optional. frequency of markers. default is 10 per plot
 # axis - optional. 'ax1' or 'ax2'. Use only if using multiple y-axis * currently not supported *
 # linewidth - optional. 0.5 by default
-#### 
+####
 
 def plot_ts(xarr=None,yarr=None,yerr=None,ptype='plot',cnt=0,color=False,mfreq=0,axis='ax1',linewidth=0.5,markersize=25):
   colors = ['r','b','g','y','k']
@@ -32,7 +32,7 @@ def plot_ts(xarr=None,yarr=None,yerr=None,ptype='plot',cnt=0,color=False,mfreq=0
   marker = ['o','*','^','s','d','3','d','o','*','^','1','4']
   if mfreq == 0:
     mfreq = len(yarr)
-  markerfreq = len(yarr)/mfreq  
+  markerfreq = len(yarr)/mfreq
   #print markerfreq
   if ptype == 'plot':
     if xarr == None:
@@ -57,7 +57,7 @@ def plot_ts(xarr=None,yarr=None,yerr=None,ptype='plot',cnt=0,color=False,mfreq=0
       p = ax.scatter(xarr,yarr,marker=marker[cnt],color='k',linewidth=linewidth,s=markersize)
     else:
       p = ax.scatter(xarr,yarr,marker=marker[cnt],color=colors[cnt],linewidth=linewidth,s=markersize)
-  return p 
+  return p
 
 #### To plot CDFs.
 #    Same as plot_ts, except xarr is not optional
@@ -71,14 +71,17 @@ def plot_cdf(xarr=[],yarr=[],file=None,cnt=0,color=False,axis='ax1'):
   marker = ['o','*','^','1','2','3','4','o','*','^','1','^']
   colors = ['r','b','g','y','k']
 
-  markerfreq = len(yarr)/10  
+  if yarr == None or yarr == []:
+    yarr = np.cumsum(xarr)/np.sum(xarr)
+
+  markerfreq = len(yarr)/10
   if color == False:
     p = ax.plot(xarr,yarr,color='k',linestyle=ls[cnt],marker=marker[cnt],markevery=markerfreq)[0]
   else:
     p = ax.plot(xarr,yarr,color=colors[cnt],linewidth=3,linestyle=ls[cnt])[0]
   del xarr
   del yarr
-  return p 
+  return p
 
 def plot_hist(yarr,width,yerr=None,col=1,cnt=0,color=False):
   htch = ['/','**','..','++','x','o','\\','||','oo','//']
@@ -88,7 +91,7 @@ def plot_hist(yarr,width,yerr=None,col=1,cnt=0,color=False):
   p = []
   y = yarr
   x = np.arange(0,len(y))
-  left = np.array(x)*col + cnt*width 
+  left = np.array(x)*col + cnt*width
   print y,cnt,left
   if color == False:
     p = plt.bar(left,y,width,hatch=htch[cnt],color='w',ecolor='k')
@@ -97,8 +100,8 @@ def plot_hist(yarr,width,yerr=None,col=1,cnt=0,color=False):
   if yerr != None:
     yerr = np.array(yerr)/2
     plt.errorbar(left+width/2,np.array(yarr)+np.array(yerr),fmt=None,yerr=yerr,ecolor='k')
-    
-  return p 
+
+  return p
 
 def plot_box(arr,notch=0,sym='+',vert=1,whis=1.5,positions=None,widths=0.75):
   bp = plt.boxplot(arr,notch=notch,sym=sym,vert=vert,whis=whis,positions=positions)
@@ -128,7 +131,7 @@ def legend(leg=None,p=None,fn=None,loc='best',axis='ax1',fs='large',ncol=1,clear
 # h - height
 # axes - optional; if you want to move around the axes, see example file
 ####
- 
+
 def figsize(l,h,axes=None):
   fig = plt.figure(num=1,figsize=(l,h))
   global ax1
@@ -171,7 +174,7 @@ def figstuff(log=None,xlabel=None,ylabel=None,xlim=None,ylim=None,xticks=None,yt
     ax.set_xscale('log')
   if log in ['logy','logxy']:
     ax.set_yscale('log')
-   
+
   if xlabel == None:
     xlabel = ''
   if ylabel == None:
@@ -213,7 +216,7 @@ def figstuff(log=None,xlabel=None,ylabel=None,xlim=None,ylim=None,xticks=None,yt
       ax.set_ylim(ymin=ylim[0])
     else:
       ax.set_ylim(ymin=ylim[0],ymax=ylim[1])
-    
+
   if hline != None:
     ax.axhline(y=hline)
   if vline != None:
@@ -243,7 +246,7 @@ def figstuff(log=None,xlabel=None,ylabel=None,xlim=None,ylim=None,xticks=None,yt
 
 def annotate(x,y,xt,yt,t):
   for i in range(0,len(x)):
-    ax1.annotate(t[i],(x[i],y[i]),xytext=(xt[i],yt[i]),arrowprops=dict(arrowstyle='->')) 
+    ax1.annotate(t[i],(x[i],y[i]),xytext=(xt[i],yt[i]),arrowprops=dict(arrowstyle='->'))
 
 def text(xarr,yarr,tarr,fontsize=12):
   for i in range(0,len(xarr)):
